@@ -1,0 +1,78 @@
+<PUBLIC:ATTACH EVENT="oninput"  ONEVENT="onchange()" />
+<PUBLIC:ATTACH EVENT="onkeyup"  ONEVENT="onchange()" />
+<PUBLIC:ATTACH EVENT="onblur"  ONEVENT="onchange()" />
+<PUBLIC:ATTACH EVENT="onfocus"  ONEVENT="onchange()" />
+<PUBLIC:ATTACH EVENT="onclick"  ONEVENT="onchange()" />
+<PUBLIC:ATTACH EVENT="onpropertychange"  ONEVENT="onpropertychange()" />
+<SCRIPT LANGUAGE="JScript">
+var placeholderEl = document.createElement("span");
+placeholderEl.setAttribute("class","-ie9-placeholder");
+
+placeholderEl.attachEvent("onclick",function(){
+  element.focus();
+});
+insertAfter(placeholderEl,element);
+
+var placeholderInnerEl = document.createElement("span");
+placeholderInnerEl.setAttribute("class","-ie9-placeholder-inner");
+
+placeholderEl.appendChild(placeholderInnerEl);
+onpropertychange();
+function onchange(){
+    placeholderEl.style.display = element.value?"none":"inline";
+}
+function onpropertychange(){
+    var moveLength = getMoveLength();
+    placeholderEl.style.left = moveLength.left;
+    placeholderEl.style.top = moveLength.top;
+    placeholderEl.style.display = element.value||isHidden()?"none":"inline";
+    var placeholderStr = element.getAttribute("placeholder");
+    placeholderInnerEl.setAttribute("placeholder",placeholderStr||"");
+    placeholderInnerEl.style.maxWidth = moveLength.maxWidth;
+}
+function insertAfter(newElement,targetElement) {
+    var parent = targetElement.parentNode;
+    if(parent.lastChild == targetElement) {
+        parent.appendChild(newElement);
+    } else {
+        parent.insertBefore(newElement,targetElement.nextSibling);
+    }
+}
+function getMoveLength(){
+  var clientHeight = element.clientHeight;
+  var computedStyle = window.getComputedStyle(element,null);
+  var offsetWidth = element.offsetWidth;
+  
+  var marginRightWidth = computedStyle.getPropertyValue("margin-right");
+  var paddingTopWidth = computedStyle.getPropertyValue("padding-top");
+  var paddingRightWidth = computedStyle.getPropertyValue("padding-right");
+  var paddingBottomWidth = computedStyle.getPropertyValue("padding-bottom");
+  var paddingLeftWidth = computedStyle.getPropertyValue("padding-left");
+  var borderLeftWidth = computedStyle.getPropertyValue("border-left-width");  
+  var left =toNumber(offsetWidth)+
+            toNumber(marginRightWidth)-
+            toNumber(paddingLeftWidth)-
+            toNumber(borderLeftWidth);
+  var top = 0;
+  if(element.nodeName=="TEXTAREA"){
+      var rows = element.rows;
+      top = (toNumber(clientHeight)-
+            toNumber(paddingTopWidth)-
+            toNumber(paddingBottomWidth)
+            )*(rows-1)/rows;
+  } 
+  var maxWidth = toNumber(element.clientWidth) - 
+                 toNumber(paddingLeftWidth) - 
+                 toNumber(paddingRightWidth);                      
+  return {left:-left+"px",top:-top+"px",maxWidth:maxWidth+"px"};
+}
+function isHidden(){
+    var computedStyle = window.getComputedStyle(element,null);
+    var display = computedStyle.getPropertyValue("display");
+    var visibility = computedStyle.getPropertyValue("visibility");
+    return display=="none"||visibility=="hidden";
+}
+function toNumber(numberStr){
+  return parseFloat(numberStr)||0;
+}
+</SCRIPT>

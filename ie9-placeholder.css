@@ -1,0 +1,19 @@
+input,textarea{
+    behavior: url(./ie9-placeholder.htc);
+}
+.-ie9-placeholder{
+    color:rgb(117, 117, 117);
+    position: relative;
+    font-size: 12px;
+    cursor:text;
+}
+.-ie9-placeholder-inner{
+    position:absolute;
+    top:0;
+    white-space: nowrap;
+    text-overflow:clip;
+    overflow: hidden;
+}
+.-ie9-placeholder-inner:after{
+    content:attr(placeholder); 
+}

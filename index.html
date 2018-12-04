@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ie9-placeholder</title>
+    <link rel="stylesheet" href="./ie9-placeholder.css">
+    <style>
+        code{
+            border:1px solid #ddd;
+            background: #eee;
+            padding:10px;
+        }
+    </style>
+</head>
+<body>
+    <h3>ie9-placeholder</h3>
+    <i>因为ie9不支持表单元素的placeholder属性,所以写了这个小插件</i>
+    <h4>优势</h4>
+    <i>不需要通过js来实现placeholder效果,跟现代浏览器一样的配置placeholder属性即可</i>
+    <h4>使用方法</h4>
+    <code>
+        &lt;input name=&quot;username&quot; placeholder=&quot;请输入用户名&quot;&gt;
+    </code>
+    <h4>
+        注意事项
+    </h4>
+    <div>
+        <i>ie9-placeholder.css</i>和<i>ie9-placeholder.htc</i>
+        必须要与根文件路径同级,比如根文件是<i>index.html</i>那么在
+        <i>index.html</i>中引入插件的代码需要写成<br/><br/>
+        <code>
+                &lt;link rel=&quot;stylesheet&quot; href=&quot;./ie9-placeholder.css&quot;&gt;
+        </code>
+    </div>
+    <h4>
+        测试用例
+    </h4>
+    <span style="font-size:12px;">占位元素(同级文本)</span>
+    <input id="inputEl" placeholder="请输入一段文字"/>
+    <span style="font-size:24px;">占位元素(同级文本)</span>
+    <textarea id="textareaEl" placeholder="请输入一段文字"></textarea>
+    <span style="font-size:40px;">占位元素(同级文本)</span>    
+    <hr/>
+    <div id="container"></div>
+    <button id="btn">改变上面元素的属性</button>
+    <button id="generate">动态生成元素</button>
+    <script>
+        document.querySelector("#btn").addEventListener("click",function(){
+            var inputEl = document.querySelector("#inputEl");
+            change(inputEl);
+            var textareaEl = document.querySelector("#textareaEl");
+            change(textareaEl);
+        });
+        document.querySelector("#generate").addEventListener("click",function(){
+            var inputEl = document.createElement("input");
+            inputEl.setAttribute("placeholder","动态生成input的placeholder");
+            document.querySelector("#container").appendChild(inputEl);
+        });
+        function change(_this){
+            if(_this.nodeName=="INPUT"){
+                _this.style.height = (Math.random()+1)*22+"px";
+            }
+            _this.style.width = Math.random()*200+100+"px";
+            _this.style.padding = Math.random()*10+"px";
+            var str = "请输入一段文字";
+            var l = Math.round(Math.random()*3);
+            for(var i = 0;i<l;i++){
+                str+=str;
+            }
+            _this.setAttribute("placeholder",str);
+            if(_this.nodeName=="TEXTAREA"){
+                _this.rows = Math.round(Math.random()*5)+1;
+            }
+        }
+    </script>
+</body>
+</html>
