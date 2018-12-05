@@ -12,6 +12,9 @@
             background: #eee;
             padding:10px;
         }
+        .hidden{
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -46,17 +49,33 @@
     <div id="container"></div>
     <button id="btn">改变上面元素的属性</button>
     <button id="generate">动态生成元素</button>
+    <button id="toggleShow">隐藏显示上面的元素</button>
     <script>
+        var inputEl = document.querySelector("#inputEl");
+        var textareaEl = document.querySelector("#textareaEl");
         document.querySelector("#btn").addEventListener("click",function(){
-            var inputEl = document.querySelector("#inputEl");
             change(inputEl);
-            var textareaEl = document.querySelector("#textareaEl");
             change(textareaEl);
         });
         document.querySelector("#generate").addEventListener("click",function(){
             var inputEl = document.createElement("input");
             inputEl.setAttribute("placeholder","动态生成input的placeholder");
             document.querySelector("#container").appendChild(inputEl);
+        });
+        document.querySelector("#toggleShow").addEventListener("click",function(){
+            var display = inputEl.style.display;
+            var _class = textareaEl.getAttribute("class");
+            if(display==="none"){
+                inputEl.style.display="inline";
+            }else{
+                inputEl.style.display="none";
+            }
+            if(_class=="hidden"){
+                textareaEl.setAttribute("class","");
+            }else{
+                textareaEl.setAttribute("class","hidden");
+            }
+
         });
         function change(_this){
             if(_this.nodeName=="INPUT"){

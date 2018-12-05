@@ -4,24 +4,28 @@
 <PUBLIC:ATTACH EVENT="onfocus"  ONEVENT="onchange()" />
 <PUBLIC:ATTACH EVENT="onclick"  ONEVENT="onchange()" />
 <PUBLIC:ATTACH EVENT="onpropertychange"  ONEVENT="onpropertychange()" />
+<PUBLIC:ATTACH EVENT="oncontentready" ONEVENT="oncontentready()" />
 <SCRIPT LANGUAGE="JScript">
-var placeholderEl = document.createElement("span");
-placeholderEl.setAttribute("class","-ie9-placeholder");
+var placeholderEl,placeholderInnerEl;
+function oncontentready(){
+    placeholderEl = document.createElement("span");
+    placeholderEl.setAttribute("class","-ie9-placeholder");
 
-placeholderEl.attachEvent("onclick",function(){
-  element.focus();
-});
-insertAfter(placeholderEl,element);
+    placeholderEl.attachEvent("onclick",function(){
+        element.focus();
+    });
+    insertAfter(placeholderEl,element);
 
-var placeholderInnerEl = document.createElement("span");
-placeholderInnerEl.setAttribute("class","-ie9-placeholder-inner");
+    placeholderInnerEl = document.createElement("span");
+    placeholderInnerEl.setAttribute("class","-ie9-placeholder-inner");
 
-placeholderEl.appendChild(placeholderInnerEl);
-onpropertychange();
+    placeholderEl.appendChild(placeholderInnerEl);
+    propertyready();
+}
 function onchange(){
     placeholderEl.style.display = element.value?"none":"inline";
 }
-function onpropertychange(){
+function propertyready(){
     var moveLength = getMoveLength();
     placeholderEl.style.left = moveLength.left;
     placeholderEl.style.top = moveLength.top;
@@ -29,6 +33,19 @@ function onpropertychange(){
     var placeholderStr = element.getAttribute("placeholder");
     placeholderInnerEl.setAttribute("placeholder",placeholderStr||"");
     placeholderInnerEl.style.maxWidth = moveLength.maxWidth;
+}
+function onpropertychange(){
+    //var propertyName = event.propertyName;
+    //其实可以通过propertyName来获取到具体的改变属性
+    //然后来根据具体属性来决定是否重新计算布局
+    //但属性太多了，而对于每个元素改变属性也不是特别频繁，
+    //所以我就不写了。
+    //if(['className','style','style.width',...].indexOf(propertyName)!=-1){
+    //  ...
+    //}
+    if (event.srcElement == element){ 
+       propertyready();
+    }
 }
 function insertAfter(newElement,targetElement) {
     var parent = targetElement.parentNode;
