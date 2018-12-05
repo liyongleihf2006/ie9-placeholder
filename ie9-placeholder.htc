@@ -8,31 +8,40 @@
 <SCRIPT LANGUAGE="JScript">
 var placeholderEl,placeholderInnerEl;
 function oncontentready(){
-    placeholderEl = document.createElement("span");
-    placeholderEl.setAttribute("class","-ie9-placeholder");
+        init();
+        propertyready();
+}
+function init(){
+    if(element.hasAttribute("placeholder")&&!placeholderEl){
+        placeholderEl = document.createElement("span");
+        placeholderEl.setAttribute("class","-ie9-placeholder");
 
-    placeholderEl.attachEvent("onclick",function(){
-        element.focus();
-    });
-    insertAfter(placeholderEl,element);
+        placeholderEl.attachEvent("onclick",function(){
+            element.focus();
+        });
+        insertAfter(placeholderEl,element);
 
-    placeholderInnerEl = document.createElement("span");
-    placeholderInnerEl.setAttribute("class","-ie9-placeholder-inner");
+        placeholderInnerEl = document.createElement("span");
+        placeholderInnerEl.setAttribute("class","-ie9-placeholder-inner");
 
-    placeholderEl.appendChild(placeholderInnerEl);
-    propertyready();
+        placeholderEl.appendChild(placeholderInnerEl);
+    }
 }
 function onchange(){
-    placeholderEl.style.display = element.value?"none":"inline";
+    if(placeholderEl){
+        placeholderEl.style.display = element.value?"none":"inline";
+    }
 }
 function propertyready(){
-    var moveLength = getMoveLength();
-    placeholderEl.style.left = moveLength.left;
-    placeholderEl.style.top = moveLength.top;
-    placeholderEl.style.display = element.value||isHidden()?"none":"inline";
-    var placeholderStr = element.getAttribute("placeholder");
-    placeholderInnerEl.setAttribute("placeholder",placeholderStr||"");
-    placeholderInnerEl.style.maxWidth = moveLength.maxWidth;
+    if(placeholderEl){
+        var moveLength = getMoveLength();
+        placeholderEl.style.left = moveLength.left;
+        placeholderEl.style.top = moveLength.top;
+        placeholderEl.style.display = element.value||isHidden()?"none":"inline";
+        var placeholderStr = element.getAttribute("placeholder");
+        placeholderInnerEl.setAttribute("placeholder",placeholderStr||"");
+        placeholderInnerEl.style.maxWidth = moveLength.maxWidth;
+    }
 }
 function onpropertychange(){
     //var propertyName = event.propertyName;
@@ -44,7 +53,7 @@ function onpropertychange(){
     //  ...
     //}
     if (event.srcElement == element){ 
-       propertyready();
+        oncontentready();
     }
 }
 function insertAfter(newElement,targetElement) {
