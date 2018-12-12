@@ -1,4 +1,4 @@
-input,textarea{
+html,input,textarea{
     behavior: url(./ie9-placeholder.htc);
 }
 .-ie9-placeholder{
