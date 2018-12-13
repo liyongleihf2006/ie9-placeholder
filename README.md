@@ -4,6 +4,8 @@
 
 *不需要通过js来实现placeholder效果,跟现代浏览器一样的配置placeholder属性即可*
 
+*可以在vue和react中正常渲染*
+
 **使用方法**
 
     <input name="username" placeholder="请输入用户名">
